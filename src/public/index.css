@@ -2,4 +2,154 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  transition: all 0.4s linear;
+}
+
+:root {
+  --white: #cbeeed;
+  --black: #07252d;
+  --black-tr: #07252d76;
+  --blue: #03bcf4;
+  --blue-tr: #03bcf464;
+}
+
+body {
+  background: var(--black);
+  font-size: 16px;
+  font-family: 'Comfortaa', cursive;
+}
+
+.main-wrap {
+  display: flex;
+  align-items: center;
+  height: 45vh;
+}
+
+.main-body {
+  margin-top: 2rem;
+}
+
+.main-head{
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  padding-top: 1.25rem;
+
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .375rem;
+  font-size: 1.6em;
+  line-height: .75em;
+
+  -webkit-box-reflect: below 1px linear-gradient(transparent, var(--black-tr)) ;
+
+  animation: light 2s ease-in-out infinite;
+}
+
+@keyframes light {
+  from {
+    color: var(--black);
+    text-shadow: none;
+  }
+  to {
+    color: var(--white);
+    text-shadow: 
+    0 0 10px var(--blue),
+    0 0 20px var(--blue),
+    0 0 40px  var(--blue),
+    0 0 80px  var(--blue),
+    0 0 160px var(--blue);
+  }
+}
+
+
+.films-list {
+  display: grid;
+  width: 90vw;
+  margin: auto;
+  
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(10, minmax(6rem, 9rem));
+  gap: 1.25em;
+}
+
+.films-card {
+  position: relative;
+  text-align: center;
+  border-radius: .33em;
+  background-size: contain;
+  overflow: hidden;
+  background: #5fd0bd;
+}
+
+.films-card:hover {
+  border: 1px solid  var(--blue);
+}
+
+.film-card-img {
+  filter: blur(1em);
+}
+
+.films-card--title {
+  display: block;
+  position: absolute;
+  top: .4rem;
+  left: 0;
+  right: 0;
+
+  font-weight: 900;
+  font-size: 1.1em;
+
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+
+  text-shadow: 
+    0 0 10px  var(--blue),
+    0 0 20px  var(--blue),
+    0 0 40px  var(--blue),
+    0 0 80px  var(--blue),
+    0 0 160px var(--blue);
+
+  color: var(--white);
+}
+
+.film-card-btns {
+  position: absolute;
+  bottom: -1.5rem;
+  left: 0;
+  right: 0;
+  padding: 0 .6rem;
+}
+
+.films-card:hover > .film-card-btns {
+  bottom: .4rem;
+}
+
+.film-card-btns > button:nth-child(1){
+  float: left;
+}
+.film-card-btns > button:nth-child(2){
+  float: right;
+}
+.btn {
+  padding: .25em .5em;
+
+  text-transform: uppercase;
+  outline: none;
+  border: none;
+
+  cursor: pointer;
+  
+  border-radius: .3em;
+  letter-spacing: 1px;
+  font-weight: 700;
+
+  color: var(--white);
+  text-shadow: 0 0 10px var(--blue-tr);
+  background: var(--black);
+}
+
+.btn:hover {
+  text-shadow: 0 0 10px var(--blue);
 }
