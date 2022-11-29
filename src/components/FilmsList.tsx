@@ -11,6 +11,7 @@ const FilmsList: React.FC<FilmsListProps> = ({ resource }) => {
 
   const films = useMemo(() => {
     const film_bundle = resource.films.read() as Films;
+
     return film_bundle.films.map(film => <FilmCard film={film} key={film.filmId} />);
   }, []);
 

@@ -1,9 +1,9 @@
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 import ErrorBoundaries from '../components/ErrorBoundaries';
 import FilmsList from '../components/FilmsList';
+import Loader from '../components/Loader';
 import { MainHead } from '../components/MainHead';
 import { getResource } from '../helpers/getResource';
-import { Resource } from '../types';
 
 const resource = getResource();
 
@@ -14,7 +14,7 @@ function Main() {
       <MainHead />
       <div className='main-body'>
         <ErrorBoundaries>
-          <Suspense fallback={<h1>Loading...</h1>} >
+          <Suspense fallback={<Loader />} >
             <FilmsList resource={resource} />
           </Suspense>
         </ErrorBoundaries>

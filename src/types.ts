@@ -1,3 +1,4 @@
+import { MutableRefObject } from 'react';
 import { getResource } from './helpers/getResource';
 
 export interface HttpTypes {
@@ -26,3 +27,25 @@ export interface Films {
 };
 
 export type Resource = ReturnType<typeof getResource>;
+
+export type UpgradeRef = {
+  current: MutableRefObject<HTMLVideoElement>;
+  togglers: {
+    Size: MutableRefObject<HTMLDivElement>,
+    Active: MutableRefObject<HTMLDivElement>,
+    Flags: MutableRefObject<{
+      canRemove: boolean;
+      isSmall: boolean;
+      isOpen: boolean;
+      isPlay: boolean;
+      values: {
+        big: number,
+        small: number,
+      }
+    }>
+  };
+  videoPlay: Function;
+  videoPause: Function;
+  videoReload: Function;
+  changeSize: () => boolean;
+}

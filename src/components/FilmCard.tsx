@@ -1,6 +1,8 @@
 import React from 'react';
 import { Film } from '../types';
-import { Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { AppRoutes } from '../helpers/const';
+import { spaceKeyPrevent } from '../helpers/utils';
 
 
 type FilmCardProps = {
@@ -8,6 +10,7 @@ type FilmCardProps = {
 }
 
 const FilmCard: React.FC<FilmCardProps> = ({ film }) => {
+  const watchPath = AppRoutes.film.replace(':id', String(film.filmId));
 
   return (
     <div
@@ -15,18 +18,30 @@ const FilmCard: React.FC<FilmCardProps> = ({ film }) => {
       className="films-card"
       tabIndex={0}
     >
+
       <img
         src={film.posterUrl}
         alt={film.nameRu}
         className="film-card-img"
       />
+
       <span
         className='films-card--title'
       >{film.nameEn || 'Film'}</span>
+
       <div className="film-card-btns">
-        <button className='btn'> watch </button>
-        <button className='btn'> promotion </button>
+        <Link
+          className='btn'
+          to={watchPath}
+          onKeyDown={spaceKeyPrevent}
+        > watch </Link>
+        <Link
+          className='btn'
+          to='/'
+          onKeyDown={spaceKeyPrevent}
+        > promotion </Link>
       </div>
+
     </div>
   );
 }

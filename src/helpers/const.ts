@@ -1,16 +1,30 @@
 import Advertising from '../page-components/Advertising';
+import CurrentFilm from '../page-components/CurrentFilm';
 import Error from '../page-components/Error';
 import Main from '../page-components/Main';
 
 
+export const AppRoutes = {
+  main: '/',
+  promotion: '/:id/ad',
+  film: '/:id',
+};
+
 export const roote_paths = [
-  { path: '/', title: 'Главная', element: Main },
-  { path: '/:id/ad', title: 'Рекламный плеер', element: Advertising },
-  { path: '/:id', title: 'Плеер', element: Advertising },
+  { path: AppRoutes.main, title: 'Главная', element: Main },
+  { path: AppRoutes.promotion, title: 'Рекламный плеер', element: Advertising },
+  { path: AppRoutes.film, title: 'Фильм', element: CurrentFilm },
   { path: '*', title: 'Ошибка', element: Error },
 ];
 
 const HTTP = {
-  films_list: '/films/top?type=TOP_100_POPULAR_FILMS'
+  films_list: '/films/top?type=TOP_100_POPULAR_FILMS',
+  film: '/films/id',
 };
 export default HTTP;
+console.log(process.env.REACT_APP_X_API_KEY);
+
+export const headers = {
+  'X-API-KEY': process.env.REACT_APP_X_API_KEY!,
+  'Content-Type': 'application/json',
+};
