@@ -11,6 +11,7 @@ type FilmCardProps = {
 
 const FilmCard: React.FC<FilmCardProps> = ({ film }) => {
   const watchPath = AppRoutes.film.replace(':id', String(film.filmId));
+  const promotionPath = AppRoutes.promotion.replace(':id', String(film.filmId));
 
   return (
     <div
@@ -37,7 +38,7 @@ const FilmCard: React.FC<FilmCardProps> = ({ film }) => {
         > watch </Link>
         <Link
           className='btn'
-          to='/'
+          to={promotionPath}
           onKeyDown={spaceKeyPrevent}
         > promotion </Link>
       </div>

@@ -38,14 +38,18 @@ export type UpgradeRef = {
       isSmall: boolean;
       isOpen: boolean;
       isPlay: boolean;
+      wasClick: number;
+      isBlock: boolean,
+      loadMeta: boolean,
       values: {
         big: number,
         small: number,
-      }
+      },
     }>
   };
-  videoPlay: Function;
+  videoPlay: () => Promise<boolean>;
+  changeBlock: (isBlock: boolean) => boolean;
   videoPause: Function;
-  videoReload: Function;
-  changeSize: () => boolean;
+  changeOpen: () => Promise<boolean>;
+  changeSize: (isSmall?: boolean) => boolean;
 }

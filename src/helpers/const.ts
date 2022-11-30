@@ -22,7 +22,6 @@ const HTTP = {
   film: '/films/id',
 };
 export default HTTP;
-console.log(process.env.REACT_APP_X_API_KEY);
 
 export const headers = {
   'X-API-KEY': process.env.REACT_APP_X_API_KEY!,

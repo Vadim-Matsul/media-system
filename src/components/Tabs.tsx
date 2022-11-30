@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer, useRef, useState } from 'react';
 import { Film, UpgradeRef } from '../types';
+import ErrorBoundaries from './ErrorBoundaries';
 import { Collapse } from './svg/Collapse';
 import { Expand } from './svg/Expand';
 import { Pause } from './svg/Pause';
@@ -27,17 +28,15 @@ const Tabs: React.FC<TabsProps> = ({ film }) => {
       const active = obj.togglers.Active.current;
       const sizer = obj.togglers.Size.current;
 
-
       isSmall
         ? video!.width = small
         : video!.width = big;
 
-
       active.onclick = () => {
         isPlay
           ? obj.videoPause()
-          : obj.videoPlay()
-      }
+          : obj.videoPlay();
+      };
 
       sizer.onclick = () => {
         const isSmall = obj.changeSize();
@@ -45,11 +44,10 @@ const Tabs: React.FC<TabsProps> = ({ film }) => {
         isSmall
           ? video!.width = small
           : video!.width = big;
-      }
+      };
 
     }
   });
-
 
 
   const handleChangeActive = (evt: React.MouseEvent<HTMLDivElement>) => {
@@ -64,22 +62,24 @@ const Tabs: React.FC<TabsProps> = ({ film }) => {
       <div className='tab-toggle' onClick={handleChangeActive}>
         <button
           name='isFilm'
-          className='btn'
+          className={`btn btn-movie ${active.isFilm ? 'btn-movie--active' : ''}`}
         > Movie </button>
         <button
           name='isStories'
-          className='btn'
+          className={`btn btn-movie ${active.isStories ? 'btn-movie--active' : ''}`}
         > Stories </button>
       </div>
 
       <div className='tab-elements'>
         {active.isFilm &&
-          <VideoPlayer
-            preview={film.posterUrlPreview}
-            parentForceUpdate={parentForceUpdate}
-            initSmall={false}
-            ref={PlayerRef}
-          />
+          <ErrorBoundaries>
+            <VideoPlayer
+              preview={film.posterUrlPreview}
+              parentForceUpdate={parentForceUpdate}
+              initSmall={false}
+              ref={PlayerRef}
+            />
+          </ErrorBoundaries>
         }
       </div>
 

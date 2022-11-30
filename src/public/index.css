@@ -159,6 +159,22 @@ body {
   margin: 0 0.3rem;
 }
 
+.btn-movie {
+  border: 1px solid var(--black);
+
+  color: var(--white);
+  background: var(--blue-tr);
+}
+
+.btn-movie--active {
+  font-weight: 800;
+
+  cursor: auto;
+
+  color: var(--blue);
+  text-shadow: 0 0 10px var(--black);
+}
+
 .btn:hover {
   text-shadow: 0 0 10px var(--blue);
 }
@@ -168,20 +184,22 @@ body {
   outline: 1px solid var(--blue);
 }
 
-.tab-wrap {
+.tab-wrap, 
+.promotion-wrap {
   width: 40vw;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
-  background: white;
 }
 
-.tab-elements {
+.tab-elements,
+.promotion-wrap {
   min-height: 50vh;
-  background: rgb(26, 177, 203);
   padding: .5em 1em;
+
+  border-radius: .3em;
+  background: rgb(26, 177, 203);
 }
 
 .player-wrap {
@@ -264,6 +282,14 @@ body {
   height: 2em;
 }
 
+.player-video-muted {
+  position: absolute;
+  top: 50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
 .player-modal-close::after,
 .player-modal-close::before  {
   position: absolute;
@@ -297,7 +323,8 @@ body {
   bottom: 5px;
   right: 30px;
 
-  width: 80px;
+  min-width: 30px;
+  max-width: 80px;
   height: 30px;
 
   padding: 3px 0 0 5px;
@@ -315,7 +342,11 @@ body {
   0 0 80px var(--blue-tr);
 }
 
-.modal-toggle-size, 
-.modal-toggle-time {
+.modal-toggle-wrap > div {
   cursor: pointer;
+}
+
+.block {
+  cursor: not-allowed;
+  fill: red;
 }

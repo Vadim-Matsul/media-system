@@ -1,33 +1,47 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { DispatchWithoutAction, MutableRefObject, RefObject, useEffect, useImperativeHandle, useLayoutEffect, useMemo, useReducer, useRef, useState, useTransition } from 'react'
-import { createPortal } from 'react-dom';
+import React, {
+  DispatchWithoutAction,
+  useImperativeHandle,
+  useReducer,
+  useEffect,
+  useState,
+  useMemo,
+  useRef,
+} from 'react';
+import { PlayButton } from './svg/PlayButton';
 import { throttle } from '../helpers/utils';
 import { Collapse } from './svg/Collapse';
+import { createPortal } from 'react-dom';
 import { Expand } from './svg/Expand';
 import { Pause } from './svg/Pause';
 import { Play } from './svg/Play';
-import { PlayButton } from './svg/PlayButton';
+import { Muted } from './Muted';
+
 
 type VideoPlayerProps = {
   preview: string;
   parentForceUpdate: DispatchWithoutAction;
   shouldWhow?: boolean;
   initSmall?: boolean;
+  smallSize?: number;
 }
+
+const staticSource = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 
 
 const VideoPlayer = React.forwardRef(
   (props: VideoPlayerProps, ref) => {
+
     const {
       preview,
       shouldWhow = true,
       parentForceUpdate,
       initSmall = true,
+      smallSize = 300,
     } = props;
     const VideoRef = useRef<HTMLVideoElement>(null);
-    const staticSource = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
-
     const [, forceUpdate] = useReducer(n => n + 1, 0);
+    const [videoError, setVideoErorr] = useState(false);
 
 
     const FlagsRef = useRef({
@@ -35,14 +49,16 @@ const VideoPlayer = React.forwardRef(
       isSmall: initSmall,
       isOpen: false,
       isPlay: true,
+      wasClick: 0,
+      isBlock: false,
+      loadMeta: false,
       values: {
         big: window.innerWidth * .75 - 60,
-        small: 300,
-      }
+        small: smallSize,
+      },
     });
     const SizeRef = useRef(null);
     const ActiveRef = useRef(null);
-
 
     const [container, modal] = useMemo(() => {
       const background = document.createElement('section');
@@ -51,13 +67,31 @@ const VideoPlayer = React.forwardRef(
       background.setAttribute('class', 'modal-background');
       element.setAttribute('class', 'modal-player');
 
-      background.onclick = handleModal;
-      element.onclick = evt => evt.stopPropagation();
+      if (shouldWhow) {
+        background.onclick = handleModal;
+        element.onclick = evt => evt.stopPropagation();
+      }
 
       background.appendChild(element);
 
       return [background, element];
     }, []);
+
+
+    useEffect(() => {
+      const instance = VideoRef.current;
+      if (!instance) return;
+
+      const listener = () => {
+        FlagsRef.current.isOpen
+          ? FlagsRef.current.loadMeta = true
+          : FlagsRef.current.loadMeta = false;
+        force();
+      };
+
+      instance.addEventListener('loadedmetadata', listener);
+      return () => instance.removeEventListener('loadedmetadata', listener);
+    }, [VideoRef.current, FlagsRef.current.isOpen]);
 
 
     useEffect(() => {
@@ -88,10 +122,13 @@ const VideoPlayer = React.forwardRef(
 
         if (currentSize < small) currentSize = small + 50;
         FlagsRef.current.values.big = currentSize;
-        parentForceUpdate();
+
+        if (FlagsRef.current.isOpen && !FlagsRef.current.isSmall) {
+          parentForceUpdate();
+        }
       }
 
-      const listener = throttle(handleSize, 200);
+      const listener = throttle(handleSize, 500);
 
       window.addEventListener('resize', listener);
       return () => window.removeEventListener('resize', listener);
@@ -104,32 +141,55 @@ const VideoPlayer = React.forwardRef(
       togglers: {
         Size: SizeRef,
         Active: ActiveRef,
-        Flags: FlagsRef
+        Flags: FlagsRef,
       },
 
-      videoPlay() {
-        FlagsRef.current.isPlay = true;
-        parentForceUpdate();
-        forceUpdate();
-        this.current!.current!.play();
+      async videoPlay() {
+        return await this.current!.current!.play()
+          .then(
+            () => {
+              FlagsRef.current.isPlay = true;
+              return true;
+            },
+            () => {
+              FlagsRef.current.isPlay = false;
+              setVideoErorr(true);
+              return false;
+            })
+          .finally(() => force());
       },
 
       videoPause() {
         FlagsRef.current.isPlay = false;
-        parentForceUpdate();
-        forceUpdate();
+        force();
         this.current!.current!.pause();
       },
 
-      videoReload() { this.current!.current!.load(); },
-
       changeOpen() {
         FlagsRef.current.isOpen = !FlagsRef.current.isOpen
-        forceUpdate();
+
+        if (FlagsRef.current.isOpen) {
+          FlagsRef.current.isPlay = true
+        } else if (!FlagsRef.current.isOpen) {
+          FlagsRef.current.isPlay = false;
+          FlagsRef.current.loadMeta = false;
+        }
+
+        force();
+
+        return new Promise(res => setTimeout(() => res(FlagsRef.current.isOpen)));
       },
 
-      changeSize() {
-        FlagsRef.current.isSmall = !FlagsRef.current.isSmall;
+      changeBlock(boolean: boolean) {
+        FlagsRef.current.isBlock = boolean;
+        force();
+      },
+
+      changeSize(isSmall?: boolean) {
+        let choose = !FlagsRef.current.isSmall;
+        if (typeof isSmall !== 'undefined') choose = isSmall;
+
+        FlagsRef.current.isSmall = choose;
         forceUpdate();
         return FlagsRef.current.isSmall;
       }
@@ -138,20 +198,30 @@ const VideoPlayer = React.forwardRef(
 
 
     function handleModal() {
-      setTimeout(() => {
-        if (FlagsRef.current.isOpen && VideoRef.current) VideoRef.current.play();
-      });
-
+      FlagsRef.current.wasClick++;
       FlagsRef.current.isOpen = !FlagsRef.current.isOpen;
 
-      FlagsRef.current.isOpen
-        ? FlagsRef.current.isPlay = true
-        : FlagsRef.current.isPlay = false;
+      if (FlagsRef.current.isOpen) {
+        forceUpdate()
+        setTimeout(async () => await VideoRef.current!.play());
+      }
 
+      videoError && setVideoErorr(false);
+
+      if (FlagsRef.current.isOpen) {
+        FlagsRef.current.isPlay = true
+      } else if (!FlagsRef.current.isOpen) {
+        FlagsRef.current.isPlay = false;
+        FlagsRef.current.loadMeta = false;
+      }
+
+      force();
+    };
+
+    function force() {
       forceUpdate();
       parentForceUpdate();
     };
-
 
     return (
       <>
@@ -173,26 +243,47 @@ const VideoPlayer = React.forwardRef(
             ? createPortal(
               <>
                 <video
-                  ref={VideoRef}
                   className='player-video-modal'
+                  ref={VideoRef}
                 >
                   <source src={staticSource} />
                 </video>
-                <span
-                  className='player-modal-close'
-                  onClick={handleModal}
-                />
+                {shouldWhow &&
+                  <span
+                    className='player-modal-close'
+                    onClick={handleModal}
+                  />
+                }
+                {
+                  videoError &&
+                  <Muted
+                    className='player-video-muted'
+                    onClick={() => {
+                      setVideoErorr(false);
+                      VideoRef.current!.muted = false;
+                    }}
+                  />
+                }
                 <div className='modal-toggle-wrap' >
-                  <div className='modal-toggle-size' ref={SizeRef} >
-                    {FlagsRef.current.isSmall
-                      ? <Expand />
-                      : <Collapse />
+                  <div ref={SizeRef}>
+                    {
+                      FlagsRef.current.isSmall
+                        ? <Expand />
+                        : <Collapse
+                          className={`${FlagsRef.current.isBlock ? 'block' : ''}`}
+                        />
                     }
                   </div>
-                  <div className='modal-toggle-time' ref={ActiveRef} >
-                    {FlagsRef.current.isPlay
-                      ? <Pause />
-                      : <Play />
+                  <div ref={ActiveRef}>
+                    {
+                      shouldWhow &&
+                      <>
+                        {
+                          FlagsRef.current.isPlay
+                            ? <Pause />
+                            : <Play />
+                        }
+                      </>
                     }
                   </div>
                 </div>
@@ -204,7 +295,5 @@ const VideoPlayer = React.forwardRef(
     );
   });
 
-
 VideoPlayer.displayName = 'VideoPlayer';
 export default React.memo(VideoPlayer);
-
