@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ErrorBoundaries from './components/ErrorBoundaries';
 import { roote_paths } from './helpers/const';
+import './index.css';
 
 const App = () => (
   <BrowserRouter>
