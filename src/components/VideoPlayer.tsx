@@ -15,7 +15,7 @@ import { createPortal } from 'react-dom';
 import { Expand } from './svg/Expand';
 import { Pause } from './svg/Pause';
 import { Play } from './svg/Play';
-import { Muted } from './Muted';
+import { Muted } from './svg/Muted';
 
 
 type VideoPlayerProps = {
@@ -230,7 +230,7 @@ const VideoPlayer = React.forwardRef(
             className='player-wrap--image'
             src={preview}
             width='100%'
-            height='300'
+            height='400'
             alt={'test'}
           />
           <PlayButton

@@ -20,6 +20,7 @@ export const roote_paths = [
 const HTTP = {
   films_list: '/films/top?type=TOP_100_POPULAR_FILMS',
   film: '/films/id',
+  arts: '/films/id/images?type=SHOOTING'
 };
 export default HTTP;
 

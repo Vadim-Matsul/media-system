@@ -1,11 +1,12 @@
-import React, { useEffect, useReducer, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useReducer,
+  useRef,
+  useState
+} from 'react';
 import { Film, UpgradeRef } from '../types';
 import ErrorBoundaries from './ErrorBoundaries';
-import { Collapse } from './svg/Collapse';
-import { Expand } from './svg/Expand';
-import { Pause } from './svg/Pause';
-import { Play } from './svg/Play';
-import { PlayButton } from './svg/PlayButton';
+import Stories from './Stories';
 import VideoPlayer from './VideoPlayer';
 
 type TabsProps = {
@@ -13,7 +14,7 @@ type TabsProps = {
 };
 
 const Tabs: React.FC<TabsProps> = ({ film }) => {
-  const [active, setActive] = useState({ isFilm: true, isStories: false })
+  const [isFilm, setIsFilm] = useState(true);
   const PlayerRef = useRef<HTMLVideoElement>(null);
   const [, parentForceUpdate] = useReducer(n => n + 1, 0);
 
@@ -50,37 +51,33 @@ const Tabs: React.FC<TabsProps> = ({ film }) => {
   });
 
 
-  const handleChangeActive = (evt: React.MouseEvent<HTMLDivElement>) => {
-    const element = evt.target as HTMLButtonElement;
-    setActive({ isFilm: false, isStories: false, [element.name]: true });
-  };
-
+  const handleChangeActive = () => setIsFilm(p => !p);
 
   return (
     <div className='tab-wrap'>
 
       <div className='tab-toggle' onClick={handleChangeActive}>
         <button
-          name='isFilm'
-          className={`btn btn-movie ${active.isFilm ? 'btn-movie--active' : ''}`}
+          className={`btn btn-movie ${isFilm ? 'btn-movie--active' : ''}`}
         > Movie </button>
         <button
-          name='isStories'
-          className={`btn btn-movie ${active.isStories ? 'btn-movie--active' : ''}`}
+          className={`btn btn-movie ${!isFilm ? 'btn-movie--active' : ''}`}
         > Stories </button>
       </div>
 
       <div className='tab-elements'>
-        {active.isFilm &&
-          <ErrorBoundaries>
-            <VideoPlayer
-              preview={film.posterUrlPreview}
-              parentForceUpdate={parentForceUpdate}
-              initSmall={false}
-              ref={PlayerRef}
-            />
-          </ErrorBoundaries>
-        }
+        <ErrorBoundaries>
+          {
+            isFilm
+              ? <VideoPlayer
+                preview={film.posterUrlPreview}
+                parentForceUpdate={parentForceUpdate}
+                initSmall={false}
+                ref={PlayerRef}
+              />
+              : <Stories filmId={film.kinopoiskId} />
+          }
+        </ErrorBoundaries>
       </div>
 
     </div>

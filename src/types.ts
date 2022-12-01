@@ -8,6 +8,7 @@ export interface HttpTypes {
 
 export interface Film {
   filmId: number;
+  kinopoiskId: number;
   nameRu: string;
   nameEn: string;
   year: string;
@@ -52,4 +53,10 @@ export type UpgradeRef = {
   videoPause: Function;
   changeOpen: () => Promise<boolean>;
   changeSize: (isSmall?: boolean) => boolean;
+}
+
+export interface ImagesBundle {
+  items: Array<{ imageUrl: string, previewUrl: string }>;
+  total: number;
+  totalPages: number;
 }

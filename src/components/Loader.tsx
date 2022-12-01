@@ -1,8 +1,7 @@
-
-
 export default function Loader() {
-
   return (
-    <h1>Loading...</h1>
-  )
-}
+    <div className='center-wrap'>
+      <div className='loader' />
+    </div>
+  );
+};

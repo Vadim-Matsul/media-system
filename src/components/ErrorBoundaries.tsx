@@ -11,7 +11,13 @@ class ErrorBoundaries extends PureComponent<Props, State> {
   };
 
   render(): ReactNode {
-    if (this.state.Error) return <h1>Something went wrong...</h1>;
+    if (this.state.Error) {
+      return (
+        <div className="center-wrap">
+          <span>Something went wrong...</span>
+        </div>
+      )
+    }
     return this.props.children;
   };
 }

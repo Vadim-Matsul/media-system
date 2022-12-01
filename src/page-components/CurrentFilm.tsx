@@ -1,24 +1,13 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useFilm } from '../hooks/useFilm';
 import Loader from '../components/Loader';
 import Tabs from '../components/Tabs';
 import HTTP from '../helpers/const';
-import { useHttp } from '../hooks/useHttp';
-import { Film } from '../types';
+import { useParams } from 'react-router-dom';
 
 
 function CurrentFilm() {
-  const [film, setFilm] = useState<Film | null>(null);
   const { id } = useParams();
-  const { customFetch, isLoading } = useHttp(true);
-
-  useEffect(() => {
-    (async function () {
-      const film = await customFetch({ url: HTTP.film.replace('id', id!) });
-      setFilm(film);
-    })();
-  }, []);
+  const { isLoading, film } = useFilm({ url: HTTP.film.replace('id', id!) });
 
   return (
     <div>
