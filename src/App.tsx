@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ErrorBoundaries from './components/ErrorBoundaries';
 import { roote_paths } from './helpers/const';
-import './public/index.css';
 
 const App = () => (
   <BrowserRouter>
@@ -10,7 +9,7 @@ const App = () => (
       {AppRoutes()}
     </Routes>
   </BrowserRouter>
-)
+);
 
 function AppRoutes() {
   return useMemo(() => roote_paths.map(

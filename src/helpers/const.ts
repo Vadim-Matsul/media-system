@@ -17,12 +17,11 @@ export const roote_paths = [
   { path: '*', title: 'Ошибка', element: Error },
 ];
 
-const HTTP = {
+export const HTTP = {
   films_list: '/films/top?type=TOP_100_POPULAR_FILMS',
   film: '/films/id',
   arts: '/films/id/images?type=SHOOTING'
 };
-export default HTTP;
 
 export const headers = {
   'X-API-KEY': process.env.REACT_APP_X_API_KEY!,

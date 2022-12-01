@@ -1,8 +1,8 @@
 import { useFilm } from '../hooks/useFilm';
 import Loader from '../components/Loader';
 import Tabs from '../components/Tabs';
-import HTTP from '../helpers/const';
 import { useParams } from 'react-router-dom';
+import { HTTP } from '../helpers/const';
 
 
 function CurrentFilm() {

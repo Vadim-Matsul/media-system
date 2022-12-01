@@ -16,7 +16,7 @@ class ErrorBoundaries extends PureComponent<Props, State> {
         <div className="center-wrap">
           <span>Something went wrong...</span>
         </div>
-      )
+      );
     }
     return this.props.children;
   };

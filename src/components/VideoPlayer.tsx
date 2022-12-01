@@ -14,8 +14,8 @@ import { Collapse } from './svg/Collapse';
 import { createPortal } from 'react-dom';
 import { Expand } from './svg/Expand';
 import { Pause } from './svg/Pause';
-import { Play } from './svg/Play';
 import { Muted } from './svg/Muted';
+import { Play } from './svg/Play';
 
 
 type VideoPlayerProps = {

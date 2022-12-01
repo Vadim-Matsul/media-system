@@ -4,10 +4,10 @@ import React, {
   useRef,
   useState
 } from 'react';
-import { Film, UpgradeRef } from '../types';
 import ErrorBoundaries from './ErrorBoundaries';
-import Stories from './Stories';
+import { Film, UpgradeRef } from '../types';
 import VideoPlayer from './VideoPlayer';
+import Stories from './Stories';
 
 type TabsProps = {
   film: Film

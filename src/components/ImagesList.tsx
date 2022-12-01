@@ -8,7 +8,8 @@ type ImagesListProps = {
 
 const ImagesList: React.FC<ImagesListProps> = ({ bundle }) => {
   const [count, setCount] = useState(0);
-  const limit = bundle.items.length - 1;
+  const check = bundle.items.length === 0;
+  const limit = check ? 0 : bundle.items.length - 1;
 
   const images = useMemo(() =>
     bundle.items.map(items => (
@@ -30,11 +31,9 @@ const ImagesList: React.FC<ImagesListProps> = ({ bundle }) => {
 
   useEffect(() => {
     if (count === limit) return;
-
     setTimeout(() => {
       setCount(c => c += 1);
     }, 1000);
-
   }, [count]);
 
   const handleRepeat = () => setCount(0);
@@ -46,10 +45,11 @@ const ImagesList: React.FC<ImagesListProps> = ({ bundle }) => {
           className='center-wrap'
           style={{ cursor: 'pointer' }}
           onClick={handleRepeat}
-        > repeat </span>
+        > {check ? 'nothing to watch' : 'repeat'}
+        </span>
         : <>{images[count]}</>
       }
-    </div>
+    </div >
   );
 };
 

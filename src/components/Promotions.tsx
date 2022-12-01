@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useReducer, useRef, useState } from 'react';
-import { Film, UpgradeRef } from '../types';
 import ErrorBoundaries from './ErrorBoundaries';
+import { Film, UpgradeRef } from '../types';
 import VideoPlayer from './VideoPlayer';
 
 type PromotionProps = {

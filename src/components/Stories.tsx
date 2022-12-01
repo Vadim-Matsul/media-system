@@ -1,4 +1,4 @@
-import HTTP from '../helpers/const';
+import { HTTP } from '../helpers/const';
 import { useFilm } from '../hooks/useFilm';
 import { ImagesBundle } from '../types';
 import ImagesList from './ImagesList';

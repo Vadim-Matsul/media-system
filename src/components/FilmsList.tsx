@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useMemo } from 'react';
 import { Films, Resource } from '../types';
+import React, { useMemo } from 'react';
 import FilmCard from './FilmCard';
 
 type FilmsListProps = {
